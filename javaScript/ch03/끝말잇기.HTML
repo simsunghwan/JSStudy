@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>끝말잇기</title>
+</head>
+  <div><span id="order">1</span>번째 참가자</div>
+  <div>제시어 : <span id="word"></span></div>
+  <input type="text">
+  <button>입력</button>
+  <script>   
+    const nOfPlayer = +prompt('몇 명이 참가합니까?');
+    const $button = document.querySelector('button');
+    const $input = document.querySelector('input');
+    const $word = document.querySelector('#word')
+    const $order = document.querySelector('#order')
+    let jesiWord; 
+    let inputtedWord; // 게임 참가자가 입력한 단어 저장
+    let count
+
+    const onClickButton = () => { console.log('버튼 누름')};
+    const onInput = (event) => {  };
+    
+    $button.addEventListener(
+      'click', 
+      (event) => { 
+        // return console.log('버튼 누름')
+        if(!jesiWord) { // !undefined, 제시어가 비어있다
+          jesiWord = inputtedWord // 입력한 단어를 제시어로 저장
+          $word.textContent = jesiWord  // 화면에 표시한다
+          
+          $word.textContent = jesiWord
+          /*
+          const order = Number($order.innerHTML);
+          if( order+1 > nOfPlayer) {
+            $order.innerHTML = 1
+          } else {
+            $order.innerHTML = order + 1;
+          }
+          */
+          let order = Number($order.innerHTML);
+          $order.innerHTML = (order++) % nOfPlayer + 1
+          $input.value = '';
+          $input.focus();
+
+        } else { // 제시어가 비어있지 않다
+          if(jesiWord[jesiWord.length -1] === inputtedWord[0] ) {
+            // 입력 단어가 올바름
+            // alert('올바름')
+            jesiWord = inputtedWord
+            $word.textContent = jesiWord
+            /*
+            const order = Number($order.innerHTML);
+            if( order+1 > nOfPlayer) {
+              $order.innerHTML = 1
+            } else {
+              $order.innerHTML = order + 1;
+            }
+            */
+            let order = Number($order.innerHTML);
+            $order.innerHTML = (order++) % nOfPlayer + 1
+
+            $input.value = '';
+            $input.focus();
+
+          } else {
+            // 입력 단어가 틀림
+            alert('틀림')
+          }
+          
+        }
+      } 
+    );
+    $input.addEventListener(
+      'input',
+      (event) => {
+        inputtedWord = event.target.value;
+        console.log('입력한 글자 : ', event.target.value);
+      } 
+      );
+
+  </script>
+    
+
+</body>
+</html>

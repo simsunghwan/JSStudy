@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>숫자야구</title>
+  </head>
+  <body>
+    <form id="form">
+      <input type="text" id="input" />
+      <button>확인</button>
+    </form>
+    <div id="logs"></div>
+
+    <script>
+      const $input = document.querySelector('#input');
+      const $form = document.querySelector('#form');
+      const $logs = document.querySelector('#logs');
+      /*
+      const numbers = [];
+      for(let n = 0; n <= 9; n += 1) {
+        numbers.push(n);
+      }
+      */
+      const getNum = (n, m) => {
+        return Math.floor(Math.random() * (m - n + 1) + n);
+      };
+
+      const numbers = Array(9)
+        .fill()
+        .map((v, i) => i + 1);
+      const answer = [];
+
+      // console.log(numbers)
+
+      for (let n = 0; n < 4; n++) {
+        // const index = getNum(0, 8); // undefined 생성가능성이 있음
+        const index = getNum(0, numbers.length - 1);
+        answer.push(numbers[index]);
+        numbers.splice(index, 1); // 배열에서 index위치에 1개를 삭제
+        // console.log(numbers);
+        // console.log(answer);
+      }
+
+      const tries = []; // 시도한 입력값 저장
+      const checkInput = (input) => {
+        // 문자열 input
+        if (input.length !== 4) {
+          // 길이 4의 숫자로 입력하지 않은 경우
+          return alert('잘못 입력함. 4자리 숫자가 아님');
+        }
+        if (new Set(input).size !== 4) {
+          // 4개의 숫자중에 중복된 숫자가 있을 경우
+          return alert('중복된 숫자가 있음');
+        }
+        if (tries.includes(input)) {
+          // 이미 시도한 입력체크
+          return alert('이미 시도한 숫자임');
+        }
+        tries.push(input);
+        return true;
+      };
+
+      $form.addEventListener(
+        'submit', // enter키로 처리요청 가능
+        (event) => {
+          event.preventDefault(); // default 처리를 중지
+          // submit의 default 처리 : 화면 새로고침(화면 초기화)
+          const value = $input.value;
+          $input.value = '';
+          const valid = checkInput(value);
+          // console.log(valid);
+          if (!valid) return;
+          console.log(answer);
+          if (answer.join('') === value) {
+            $logs.textContent = '홈런입니다.';
+            return;
+          }
+          if (tries.length > 10) {
+            const msg = document.createTestNode(`패배! 정답 ${answer.join('')}`);
+            $logs.appendChild(msg);
+            // $logs.testContent = `패배! 정답 ${answer.join('')}`;
+            return;
+          }
+        }
+      );
+    </script>
+  </body>
+</html>
